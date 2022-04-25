@@ -267,6 +267,8 @@ struct sysdig_bpf_settings {
 	uint16_t statsd_port;
 	char if_name[16];
 	bool events_mask[PPM_EVENT_MAX];
+	uint32_t pgfault_threshold;
+	uint32_t pgfault_count;
 } __attribute__((packed));
 
 struct tail_context {

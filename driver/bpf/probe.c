@@ -189,8 +189,13 @@ static __always_inline int bpf_page_fault(struct page_fault_args *ctx)
 
 	if (!settings->page_faults)
 		return 0;
-
+	
 	if (!settings->capture_enabled)
+		return 0;
+
+
+	settings->pgfault_count  = settings->pgfault_count+1 ;
+	if(settings->pgfault_count <= settings->pgfault_threshold)
 		return 0;
 
 	evt_type = PPME_PAGE_FAULT_E;

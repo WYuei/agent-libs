@@ -3743,7 +3743,7 @@ FILLER(sched_switch_e, false)
 	long total_rss;
 	long swap;
 	int res;
-
+	// bpf_printk("now sched switch happened\n");
 	ctx = (struct sched_switch_args *)data->ctx;
 #ifdef BPF_SUPPORTS_RAW_TRACEPOINTS
 	struct task_struct *next_task = (struct task_struct *)ctx->next;
@@ -3820,7 +3820,7 @@ FILLER(sys_pagefault_e, false)
 	unsigned long ip;
 	u32 flags;
 	int res;
-
+	bpf_printk("page fault have happened\n");
 	ctx = (struct page_fault_args *)data->ctx;
 #ifdef BPF_SUPPORTS_RAW_TRACEPOINTS
 	struct pt_regs *regs = (struct pt_regs *)ctx->regs;
@@ -3833,7 +3833,7 @@ FILLER(sys_pagefault_e, false)
 	ip = ctx->ip;
 	error_code = ctx->error_code;
 #endif
-
+	bpf_printk("address:%ld ip:%ld errer_code:%ld \n",address,ip,error_code);
 	res = bpf_val_to_ring(data, address);
 	if (res != PPM_SUCCESS)
 		return res;
@@ -3844,6 +3844,10 @@ FILLER(sys_pagefault_e, false)
 
 	flags = pf_flags_to_scap(error_code);
 	res = bpf_val_to_ring(data, flags);
+
+	struct sysdig_bpf_settings *settings;
+	settings=data->settings;
+	bpf_printk("count num : %d \n",settings->pgfault_count);
 
 	return res;
 }

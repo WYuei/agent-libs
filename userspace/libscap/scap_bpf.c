@@ -1393,6 +1393,8 @@ static int32_t set_default_settings(scap_t *handle)
 	settings.fullcapture_port_range_start = 0;
 	settings.fullcapture_port_range_end = 0;
 	settings.statsd_port = 8125;
+	settings.pgfault_threshold=50000;
+	settings.pgfault_count=0;
 	memset(settings.if_name, 0, 16);
 	for (int i = 0; i < PPM_EVENT_MAX; i++) {
 	    settings.events_mask[i] = true;
